@@ -23,6 +23,14 @@ public class CompanionService {
     }
 
     public void triggerConfirmationEmailToCompanions(UUID tripId) {}
+
+    public void triggerConfirmationEmailToCompanion(String email) {}
+
+    public CompanionCreateResponse registerCompanionToTrip(String email, Trip trip) {
+        Companion companion = new Companion(email, trip);
+        this.repository.save(companion);
+        return new CompanionCreateResponse(companion.getId());
+    }
 }
 
 

@@ -1,6 +1,8 @@
 package com.rmtech.next_trip_planner.trip;
 
 import com.rmtech.next_trip_planner.TripRepository;
+import com.rmtech.next_trip_planner.companion.CompanionCreateResponse;
+import com.rmtech.next_trip_planner.companion.CompanionRequestPayload;
 import com.rmtech.next_trip_planner.companion.CompanionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -80,6 +84,26 @@ public class TripController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/{id}/invite ")
+    public ResponseEntity<CompanionCreateResponse> inviteCompanion(@PathVariable UUID id, @RequestBody CompanionRequestPayload payload) {
+
+        Optional<Trip> trip = this.repository.findById(id);
+
+        //trip exists?
+        if(trip.isPresent()) {
+            Trip rawTrip = trip.get();
+
+            CompanionCreateResponse companionResponse = this.companionService.registerCompanionToTrip(payload.email(), rawTrip);
+
+            if(rawTrip.getIsConfirmed()) this.companionService.triggerConfirmationEmailToCompanion(payload.email());
+
+            return ResponseEntity.ok(companionResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+
     }
 
 }
