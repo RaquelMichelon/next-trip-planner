@@ -1,5 +1,7 @@
 package com.rmtech.next_trip_planner.companion;
 
+import com.rmtech.next_trip_planner.trip.Trip;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +14,12 @@ import java.util.UUID;
 @Service
 public class CompanionService {
 
-    public void registerCompanionsToTrip(List<String> companionsToInvite, UUID tripId) {
+    @Autowired
+    private CompanionRepository repository;
 
+    public void registerCompanionsToTrip(List<String> companionsToInvite, Trip trip) {
+        List<Companion> companions = companionsToInvite.stream().map(email -> new Companion(email, trip)).toList() ;
+        this.repository.saveAll(companions);
     }
 
     public void triggerConfirmationEmailToCompanions(UUID tripId) {}
