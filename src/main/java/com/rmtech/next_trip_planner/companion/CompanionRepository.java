@@ -3,6 +3,7 @@ package com.rmtech.next_trip_planner.companion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -11,4 +12,6 @@ import java.util.UUID;
  **/
 @Repository
 public interface CompanionRepository extends JpaRepository<Companion, UUID> {
+
+    List<Companion> findByTripId(UUID id);
 }

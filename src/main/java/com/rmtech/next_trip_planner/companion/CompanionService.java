@@ -31,6 +31,11 @@ public class CompanionService {
         this.repository.save(companion);
         return new CompanionCreateResponse(companion.getId());
     }
+
+    public List<CompanionData> getAllCompanionsFromTrip(UUID tripId) {
+        return this.repository.findByTripId(tripId).stream().map(companion -> new CompanionData(companion.getId(),
+                companion.getName(), companion.getEmail(), companion.getIsConfirmed())).toList();
+    }
 }
 
 

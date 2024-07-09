@@ -1,9 +1,7 @@
 package com.rmtech.next_trip_planner.trip;
 
 import com.rmtech.next_trip_planner.TripRepository;
-import com.rmtech.next_trip_planner.companion.CompanionCreateResponse;
-import com.rmtech.next_trip_planner.companion.CompanionRequestPayload;
-import com.rmtech.next_trip_planner.companion.CompanionService;
+import com.rmtech.next_trip_planner.companion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -104,6 +102,13 @@ public class TripController {
 
         return ResponseEntity.notFound().build();
 
+    }
+
+
+    @GetMapping("/{id}/companions")
+    public ResponseEntity<List<CompanionData>> getAllCompanions(@PathVariable UUID id) {
+        List<CompanionData> companiosList = this.companionService.getAllCompanionsFromTrip(id);
+        return ResponseEntity.ok(companiosList);
     }
 
 }
