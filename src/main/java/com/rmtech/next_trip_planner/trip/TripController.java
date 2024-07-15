@@ -1,6 +1,9 @@
 package com.rmtech.next_trip_planner.trip;
 
-import com.rmtech.next_trip_planner.TripRepository;
+import com.rmtech.next_trip_planner.activitity.ActivityData;
+import com.rmtech.next_trip_planner.activitity.ActivityRequestPayload;
+import com.rmtech.next_trip_planner.activitity.ActivityResponse;
+import com.rmtech.next_trip_planner.activitity.ActivityService;
 import com.rmtech.next_trip_planner.companion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +28,9 @@ public class TripController {
 
     @Autowired
     private TripRepository repository;
+
+    @Autowired
+    private ActivityService activityService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Trip> getTrip(@PathVariable UUID id) {
@@ -109,6 +114,29 @@ public class TripController {
     public ResponseEntity<List<CompanionData>> getAllCompanions(@PathVariable UUID id) {
         List<CompanionData> companiosList = this.companionService.getAllCompanionsFromTrip(id);
         return ResponseEntity.ok(companiosList);
+    }
+
+    @PostMapping("/{id}/activities")
+    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
+
+        Optional<Trip> trip = this.repository.findById(id);
+
+        if(trip.isPresent()){
+            Trip rawTrip = trip.get();
+
+            ActivityResponse activityResponse = this.activityService.registerActivity(payload, rawTrip);
+
+            return ResponseEntity.ok(activityResponse);
+        }
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @GetMapping("/{id}/activities")
+    public ResponseEntity<List<ActivityData>> getAllActivities(@PathVariable UUID id){
+        List<ActivityData> activityDataList = this.activityService.getAllActivitiesFromId(id);
+
+        return ResponseEntity.ok(activityDataList);
     }
 
 }

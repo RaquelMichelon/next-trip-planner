@@ -1,4 +1,4 @@
-package com.rmtech.next_trip_planner;
+package com.rmtech.next_trip_planner.trip;
 
 import com.rmtech.next_trip_planner.trip.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
