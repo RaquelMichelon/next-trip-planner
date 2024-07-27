@@ -1,5 +1,6 @@
 package com.rmtech.next_trip_planner.trip;
 
+import com.rmtech.next_trip_planner.activitity.InvalidActivityDateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,6 +15,11 @@ public class CustomTripExceptionHandler {
 
     @ExceptionHandler(InvalidEndDateException.class)
     public ResponseEntity<String> handleInvalidEndDateException(InvalidEndDateException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidActivityDateException.class)
+    public ResponseEntity<String> handleInvalidActivityDateException(InvalidActivityDateException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

@@ -1,9 +1,6 @@
 package com.rmtech.next_trip_planner.trip;
 
-import com.rmtech.next_trip_planner.activitity.ActivityData;
-import com.rmtech.next_trip_planner.activitity.ActivityRequestPayload;
-import com.rmtech.next_trip_planner.activitity.ActivityResponse;
-import com.rmtech.next_trip_planner.activitity.ActivityService;
+import com.rmtech.next_trip_planner.activitity.*;
 import com.rmtech.next_trip_planner.companion.*;
 import com.rmtech.next_trip_planner.link.LinkData;
 import com.rmtech.next_trip_planner.link.LinkRequestPayload;
@@ -101,7 +98,7 @@ public class TripController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/{id}/invite ")
+    @PostMapping("/{id}/invite")
     public ResponseEntity<CompanionCreateResponse> inviteCompanion(@PathVariable UUID id, @RequestBody CompanionRequestPayload payload) {
 
         Optional<Trip> trip = this.repository.findById(id);
@@ -135,6 +132,11 @@ public class TripController {
 
         if(trip.isPresent()){
             Trip rawTrip = trip.get();
+
+            //check if activity date is between trip start and end date
+            boolean validActivityDate = rawTrip.getStartsAt().isBefore(LocalDateTime.parse(payload.occursAt(), DateTimeFormatter.ISO_DATE_TIME))
+                && rawTrip.getEndsAt().isAfter(LocalDateTime.parse(payload.occursAt(), DateTimeFormatter.ISO_DATE_TIME));
+            if(!validActivityDate) throw new InvalidActivityDateException("The activity date does not correspond with the trip dates");
 
             ActivityResponse activityResponse = this.activityService.registerActivity(payload, rawTrip);
 
