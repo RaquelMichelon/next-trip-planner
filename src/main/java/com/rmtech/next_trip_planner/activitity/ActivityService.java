@@ -20,7 +20,7 @@ public class ActivityService {
     public ActivityResponse registerActivity(ActivityRequestPayload payload, Trip trip){
         Activity newActivity = new Activity(payload.title(), payload.occursAt(), trip);
 
-        this.repository.save(newActivity);
+        newActivity = this.repository.save(newActivity);
 
         return new ActivityResponse(newActivity.getId());
     }
