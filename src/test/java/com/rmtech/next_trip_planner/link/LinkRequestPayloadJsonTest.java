@@ -35,6 +35,20 @@ public class LinkRequestPayloadJsonTest {
                 .isEqualTo("url.test.com");
 
     }
+
+    @Test
+    void linkRequestPayloadDeserializationTest() throws IOException {
+        String expected = """
+                {
+                  "title": "Title Test",
+                  "url": "url.test.com"
+                }
+                """;
+
+        assertThat(json.parse(expected)).isEqualTo(new LinkRequestPayload("Title Test", "url.test.com"));
+        assertThat(json.parseObject(expected).title()).isEqualTo("Title Test");
+        assertThat(json.parseObject(expected).url()).isEqualTo("url.test.com");
+    }
 }
 
 
