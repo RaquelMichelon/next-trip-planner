@@ -1,7 +1,10 @@
 package com.rmtech.next_trip_planner;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import com.rmtech.next_trip_planner.place.Place;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +25,25 @@ class NextTripPlannerApplicationTests {
 
 	@Test
 	void contextLoads() {
+	}
+
+	@Test
+	void shouldReturnAPlaceWhenGetPlaceIsCalled() throws JsonProcessingException {
+		ResponseEntity<Place> response = restTemplate.getForEntity("/places/1", Place.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		//assertions on the object itself
+		Place place = response.getBody();
+		assertThat(place).isNotNull();
+		assertThat(place.getId()).isEqualTo(1L);
+		assertThat(place.getName()).isEqualTo("Joaquina Beach");
+		//assertions on the json
+		ObjectMapper objectMapper = new ObjectMapper();
+		String jsonResponse = objectMapper.writeValueAsString(response.getBody());
+		DocumentContext documentContext = JsonPath.parse(jsonResponse);
+		Long placeId = documentContext.read("$.id", Long.class); //to ensure that the id value will be treated as a long value instead of integer
+		assertThat(placeId).isEqualTo(1);
+		String placeName = documentContext.read("$.name");
+		assertThat(placeName).isEqualTo("Joaquina Beach");
 	}
 
 	@Test

@@ -45,8 +45,8 @@ public class PlaceJsonTest {
 
         //when then
         assertThat(json.parse(expectedJsonString)).isEqualTo(new Place(1L, "Joaquina's Beach"));
-        assertThat(json.parseObject(expectedJsonString).id()).isEqualTo(1);
-        assertThat(json.parseObject(expectedJsonString).name()).isEqualTo("Joaquina's Beach");
+        assertThat(json.parseObject(expectedJsonString).getId()).isEqualTo(1);
+        assertThat(json.parseObject(expectedJsonString).getName()).isEqualTo("Joaquina's Beach");
     }
 }
 

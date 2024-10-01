@@ -27,7 +27,6 @@
 		<url/>
 	</scm>
 	<properties>
-		<hibernate.version>6.2.7.Final</hibernate.version> <!-- to ensure the project will use the right hibernate version to deal with records as entities -->
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -42,11 +41,6 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency> <!-- configure hibernate version to use records as entities -->
-			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>6.2.7.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
